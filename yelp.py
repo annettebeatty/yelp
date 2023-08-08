@@ -46,10 +46,7 @@ if args.num:
 # Header should contain the API key
 headers = {'Authorization': 'Bearer {}'.format(API_KEY)}
 
-if args.id:
-	# Give more info about the specific business
-	yelp_id = args.id
-
+def print_id(yelp_id):
 	# Specific business end point
 	url = 'https://api.yelp.com/v3/businesses/' + str(yelp_id)
 
@@ -106,38 +103,47 @@ if args.id:
 
 	#print(json.dumps(business_data, indent = 3))
 
-else:
-	# Busines search end point
-	url = 'https://api.yelp.com/v3/businesses/search'
+def main():
+	if args.id:
+		# Give more info about the specific business
+		yelp_id = args.id
+		print_id(yelp_id)
 
-	# Search parameters
-	url_params = {
-		'term': search_term, 
-		'location': search_location,
-		'limit': search_limit
-		}
+	else:
+		# Busines search end point
+		url = 'https://api.yelp.com/v3/businesses/search'
 
-	# Call the API
-	response = requests.request('GET', url, headers=headers, params=url_params)
+		# Search parameters
+		url_params = {
+			'term': search_term, 
+			'location': search_location,
+			'limit': search_limit
+			}
 
-	# Print header
-	print("{:30}  {:6}   {:6}  {:20}  {:10}  {:20}".format("Name","Rating","Reviews","Address","Phone         ","Business ID")) 
+		# Call the API
+		response = requests.request('GET', url, headers=headers, params=url_params)
+
+		# Print header
+		print("{:30}  {:6}   {:6}  {:20}  {:10}  {:20}".format("Name","Rating","Reviews","Address","Phone         ","Business ID")) 
 
 
-	# To get a better understanding of the structure of 
-	# the returned JSON object refer to the documentation
-	# For each business, print name, rating, location and phone
+		# To get a better understanding of the structure of 
+		# the returned JSON object refer to the documentation
+		# For each business, print name, rating, location and phone
 
-	for business in response.json()["businesses"]:
-	    print("{:30}  {:6}   {:6}   {:20}  {:10}  {:20}".format(
-		business["name"][:30], 
-		business["rating"], 
-		business["review_count"], 
-		business["location"]["display_address"][0][:20], 
-		business["display_phone"],
-		business["id"]))
+		for business in response.json()["businesses"]:
+		    print("{:30}  {:6}   {:6}   {:20}  {:10}  {:20}".format(
+			business["name"][:30], 
+			business["rating"], 
+			business["review_count"], 
+			business["location"]["display_address"][0][:20], 
+			business["display_phone"],
+			business["id"]))
 
-# Convert the JSON String
-#business_data = response.json()
+	# Convert the JSON String
+	#business_data = response.json()
 
-#print(json.dumps(business_data, indent = 3))
+	#print(json.dumps(business_data, indent = 3))
+
+if __name__ == "__main__":
+    main()
