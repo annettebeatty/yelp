@@ -32,6 +32,7 @@ argParser.add_argument("--term", help="Search term")
 argParser.add_argument("--loc", help="Location")
 argParser.add_argument("--num", help="Number to return")
 argParser.add_argument("--id", help="Business ID")
+argParser.add_argument("--file", help="File name")
 args = argParser.parse_args()
 
 if args.term:
@@ -42,6 +43,9 @@ if args.loc:
 
 if args.num:
 	search_limit = args.num
+
+if args.file:
+	search_file = args.file
 
 # Header should contain the API key
 headers = {'Authorization': 'Bearer {}'.format(API_KEY)}
@@ -104,7 +108,12 @@ def print_id(yelp_id):
 	#print(json.dumps(business_data, indent = 3))
 
 def main():
-	if args.id:
+	if args.file:
+		print("filename is ", args.file)
+		id_file = open(args.file, "r");
+		print(id_file.readlines())
+
+	elif args.id:
 		# Give more info about the specific business
 		yelp_id = args.id
 		print_id(yelp_id)
