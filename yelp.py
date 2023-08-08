@@ -71,7 +71,8 @@ def print_id(yelp_id):
 	if len(business_data["location"]["display_address"]) > 2:        # If record has second address line, print it out
 		print(business_data["location"]["display_address"][2])
 
-	print("Cross streets -",business_data["location"]["cross_streets"])
+	if business_data["location"]["cross_streets"]:
+		print("Cross streets -",business_data["location"]["cross_streets"])
 	
 	print(business_data["display_phone"], "\n")
 
@@ -103,6 +104,8 @@ def print_id(yelp_id):
 		#print(day, hours)
 		print("{:10} {:10}".format(day, hours))
 
+	print("\n")
+
 	#print(business_data["url"])
 
 	#print(json.dumps(business_data, indent = 3))
@@ -111,7 +114,14 @@ def main():
 	if args.file:
 		print("filename is ", args.file)
 		id_file = open(args.file, "r");
-		print(id_file.readlines())
+		id_list = id_file.readlines()
+
+		# print(id_list)
+
+		for ids in id_list:
+			# print(ids)
+			yelp_id = ids.strip()
+			print_id(yelp_id)
 
 	elif args.id:
 		# Give more info about the specific business
